@@ -13,12 +13,15 @@ public class Test {
 		b[0] = temp;
 	}
 
-	// Won't work!
-	// Although Java manipulates objects 'by reference',
-	// Java pass references to methods 'by value';
-	// Also, Integer is immutable
-	// Refer to
-	// http://www.javaworld.com/article/2077424/learn-java/does-java-pass-by-reference-or-pass-by-value.html
+	/*
+	 * Won't work! Although Java manipulates objects 'by reference', Java pass
+	 * references to methods 'by value'; Also, Integer is immutable.
+	 * 
+	 * Refer to
+	 * http
+	 * ://www.javaworld.com/article/2077424/learn-java/does-java-pass-by-reference
+	 * -or-pass-by-value.html
+	 */
 	public static void swap(Integer a, Integer b) {
 		Integer temp = a;
 		a = b;
@@ -33,19 +36,19 @@ public class Test {
 			unsort1[i] = new Random().nextInt(NUM);
 			unsort2[i] = unsort1[i];
 		}
-		QuickSort.quickSort(unsort1);
+		QuickSort.sort(unsort1);
 		Arrays.sort(unsort2);
 
 		for (int i = 0; i < NUM; i++) {
 			if (unsort1[i].intValue() != unsort2[i].intValue()) {
 				System.out.println(unsort1[i]);
 				System.out.println(unsort2[i]);
-				System.out.println("Wrong!!!");
+				System.out.println("Sometihng is wrong for quick sort!!!");
 				System.out.println("i = " + i);
 				return;
 			}
 		}
-		System.out.println("Passed!");
+		System.out.println("Quick Sort implementation Passed!");
 	}
 
 	// Verify the correctness of quickSort() implementation
@@ -56,19 +59,19 @@ public class Test {
 			unsort1[i] = NUM * new Random().nextDouble();
 			unsort2[i] = unsort1[i];
 		}
-		QuickSort.quickSort(unsort1);
+		QuickSort.sort(unsort1);
 		Arrays.sort(unsort2);
 
 		for (int i = 0; i < NUM; i++) {
 			if ((unsort1[i].doubleValue() - unsort2[i].doubleValue()) > 10e-6) {
 				System.out.println(unsort1[i]);
 				System.out.println(unsort2[i]);
-				System.out.println("Wrong!!!");
+				System.out.println("Sometihng is wrong for quick sort!!!");
 				System.out.println("i = " + i);
 				return;
 			}
 		}
-		System.out.println("Passed!");
+		System.out.println("Quick Sort implementation Passed!");
 	}
 
 	public static void main(String[] args) {

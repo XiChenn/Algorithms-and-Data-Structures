@@ -1,38 +1,49 @@
-/**
- *
- */
 package algorithms.sorting;
 
 /**
- * A collection of sorting algorithms
+ * This class implements the QuickSort algorithm using one randomly chosen
+ * pivot. It runs in O(log (n)) time even the array contains all the same
+ * elements.
+ * 
+ * When finding the position of pivot, two pointers (i.e. i and j) are used (one
+ * at the beginning and one at the end) to "sandwich" the array. All the
+ * elements at or in the left of position i is less than the pivot. All the
+ * elements at or in the right of position j is greater than the pivot.
+ * 
+ * Then, two recursively calls are made to sort the left and right arrays.
  * 
  * @author Xi Chen
  * 
  */
-public class QuickSort {
+public final class QuickSort {
 
 	/**
-	 * QuickSort: in average, it runs in Theta(nlog n)
-	 * 
-	 * @param a
+	 * Prevent instantiation
 	 */
-	public static <T extends Comparable<T>> void quickSort(T[] a) {
-		if (a == null || a.length == 0) {
-			return;
-		}
-		quickSort(a, 0, a.length - 1);
+	private QuickSort() {
+
 	}
 
 	/**
+	 * Sort the specified array. The array must be comparable
 	 * 
-	 * @param a
-	 *            an Array
-	 * @param low
-	 *            low index of the array
-	 * @param high
-	 *            high index of the array
+	 * @param a the array to be sorted
 	 */
-	public static <T extends Comparable<T>> void quickSort(T[] a, int low,
+	public static <T extends Comparable<T>> void sort(T[] a) {
+		if (a == null || a.length == 0) {
+			return;
+		}
+		sort(a, 0, a.length - 1);
+	}
+
+	/**
+	 * Sort the specified range array.
+	 * 
+	 * @param a the array to be sorted
+	 * @param low low index of the array, inclusive, to be sorted
+	 * @param high high index of the array, inclusive, to be sorted
+	 */
+	public static <T extends Comparable<T>> void sort(T[] a, int low,
 			int high) {
 		if (low >= high) { // Base case - only 1 element
 			return;
@@ -53,24 +64,22 @@ public class QuickSort {
 			do { // Decrease j as long as a[j] > pivot
 				j--;
 			} while (a[j].compareTo(pivot) > 0 && j > i);
-			if (i < j) {
+			if (i < j) { // Swap only if i is left to j
 				swap(a, i, j);
 			}
 		}
-		
-		swap(a, i, high);
 
-		quickSort(a, low, i - 1);
-		quickSort(a, i + 1, high);
+		swap(a, i, high); // Swap pivot the the right position
+
+		sort(a, low, i - 1);
+		sort(a, i + 1, high);
 	}
 
 	/**
-	 * Swap two elements in an array
+	 * Swap two elements in an array based on the given two indices
 	 * 
-	 * @param a
-	 *            is a reference to element a
-	 * @param b
-	 *            is a reference to element b
+	 * @param idx1 the first index
+	 * @param idx2 the second index
 	 */
 	public static <T extends Comparable<T>> void swap(T[] a, int idx1, int idx2) {
 		T temp = a[idx1];
