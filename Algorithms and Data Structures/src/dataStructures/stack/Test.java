@@ -9,7 +9,7 @@ public class Test {
             stack.push(i);
         }
         
-        for (int i = 0; i < 21; i++) {
+        for (int i = 0; i < 20; i++) {
             System.out.println(stack.pop());
         }
     }
