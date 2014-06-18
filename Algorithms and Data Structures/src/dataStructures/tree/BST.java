@@ -6,7 +6,7 @@ package dataStructures.tree;
  * <p/>
  * Created by xi on 6/11/14.
  */
-public class BST<E extends Comparable<E>> {
+public class BST<E extends Comparable<E>> implements Tree<E> {
     TreeNode<E> root; // The root of the BST
     int size; // The number of nodes in the BST
 
@@ -60,9 +60,68 @@ public class BST<E extends Comparable<E>> {
      * situations)
      */
     public boolean delete (E e) {
-        TreeNode<E> deletePosistion = root;
+        TreeNode<E> deletePosistion = null, current = root;
+        while (current != null) {
+            if (e.compareTo(current.element) < 0) { // Less than
+                current = current.left;
+            } else if (e.compareTo(current.element) > 0) {
+                current = current.right;
+            } else {
+                deletePosistion = current;
+            }
+        }
         
-        return false;
+        if (deletePosistion == null) { // Didn't find the right position to delete
+            return false;
+        }
+        
+        // deletePosistion is a leaf, delete directly
+        if (deletePosistion.left == null && deletePosistion.right == null) {
+            deletePosistion.parent = null;
+        } else if (deletePosistion.left != null
+                && deletePosistion.right != null) { // deletePosistion has two
+                                                    // children
+            TreeNode<E> leftBiggestNode = null;
+            current = deletePosistion.left;
+            while (current != null) {
+                leftBiggestNode = current;
+                current = current.right;
+            }
+            
+            // Swap leftBiggestNode with deletePosistion
+            leftBiggestNode.left = deletePosistion.left;
+            deletePosistion.right = deletePosistion.right;
+            // deletePosistion is the left child of parent
+            if (deletePosistion.element
+                    .compareTo(deletePosistion.parent.element) < 0) {
+                deletePosistion.parent.left = leftBiggestNode;
+            } else { // deletePosistion is the right child of parent
+                deletePosistion.parent.right = leftBiggestNode;
+            }
+            deletePosistion.left = null;
+            deletePosistion.right = null;
+            
+        } else { // deletePosistion has one child
+            boolean isLeftChild = deletePosistion.left == null;
+            
+            // deletePosistion is the left child of parent
+            if (deletePosistion.element
+                    .compareTo(deletePosistion.parent.element) < 0) {
+                if (isLeftChild) {
+                    deletePosistion.parent.left = deletePosistion.left;
+                } else {
+                    deletePosistion.parent.left = deletePosistion.right;
+                }
+            } else { // deletePosistion is the right child of parent
+                if (isLeftChild) {
+                    deletePosistion.parent.right = deletePosistion.left;
+                } else {
+                    deletePosistion.parent.right = deletePosistion.right;
+                }
+            }
+        }
+          
+        return true;
     }
     
 }
