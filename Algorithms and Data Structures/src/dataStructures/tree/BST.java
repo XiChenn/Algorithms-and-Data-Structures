@@ -29,6 +29,7 @@ public class BST<E extends Comparable<E>> implements Tree<E> {
     public boolean insert(E e) {
         if (root == null) { // BST is empty
             root = new TreeNode<E>(e);
+            size++;
             return true;
         }
 
@@ -52,75 +53,70 @@ public class BST<E extends Comparable<E>> implements Tree<E> {
             parent.right = new TreeNode<E>(e);
         }
 
+        size++;
         return true; // Element inserted
     }
 
     /*
-     * Deleting an element from a BST - Consider the number of children (3
-     * situations)
+     * Deleting an element from a BST; Return true if deleted successfully,
+     * false if the element is not in the tree.
+     * 
+     * Case 1: the node to be deleted has no left child - attache the node's
+     * right child (can be null) to its parent's right or left branch.
+     * 
+     * Case 2: the node to be deleted has left child - find the node with the
+     * greatest value (either right-most in its left substree, or left child).
+     * Replace the node to be deleted with the element with the greatest value,
+     * then delete the greatest value node
      */
     public boolean delete (E e) {
-        TreeNode<E> deletePosistion = null, current = root;
+        TreeNode<E> current = root; // Points to the node to be deleted
+        TreeNode<E> parent = null;  // The parent node of "current"
+        
+        // Locate the position
         while (current != null) {
             if (e.compareTo(current.element) < 0) { // Less than
+                parent = current;
                 current = current.left;
             } else if (e.compareTo(current.element) > 0) {
+                parent = current;
                 current = current.right;
-            } else {
-                deletePosistion = current;
+            } else { // Find the right position
+                break;
             }
         }
         
-        if (deletePosistion == null) { // Didn't find the right position to delete
+        if (current == null) { // Either an empty BST or the element not in BST
             return false;
         }
         
-        // deletePosistion is a leaf, delete directly
-        if (deletePosistion.left == null && deletePosistion.right == null) {
-            deletePosistion.parent = null;
-        } else if (deletePosistion.left != null
-                && deletePosistion.right != null) { // deletePosistion has two
-                                                    // children
-            TreeNode<E> leftBiggestNode = null;
-            current = deletePosistion.left;
-            while (current != null) {
-                leftBiggestNode = current;
-                current = current.right;
-            }
-            
-            // Swap leftBiggestNode with deletePosistion
-            leftBiggestNode.left = deletePosistion.left;
-            deletePosistion.right = deletePosistion.right;
-            // deletePosistion is the left child of parent
-            if (deletePosistion.element
-                    .compareTo(deletePosistion.parent.element) < 0) {
-                deletePosistion.parent.left = leftBiggestNode;
-            } else { // deletePosistion is the right child of parent
-                deletePosistion.parent.right = leftBiggestNode;
-            }
-            deletePosistion.left = null;
-            deletePosistion.right = null;
-            
-        } else { // deletePosistion has one child
-            boolean isLeftChild = deletePosistion.left == null;
-            
-            // deletePosistion is the left child of parent
-            if (deletePosistion.element
-                    .compareTo(deletePosistion.parent.element) < 0) {
-                if (isLeftChild) {
-                    deletePosistion.parent.left = deletePosistion.left;
+        // Case 1: current has no left child
+        if (current.left == null) {
+            if (parent == null) { // Current points to root, delete root node
+                root = current.right;
+            } else {
+                if (current.element.compareTo(parent.element) < 0) {
+                    parent.left = current.right;
                 } else {
-                    deletePosistion.parent.left = deletePosistion.right;
+                    parent.right = current.right;
                 }
-            } else { // deletePosistion is the right child of parent
-                if (isLeftChild) {
-                    deletePosistion.parent.right = deletePosistion.left;
-                } else {
-                    deletePosistion.parent.right = deletePosistion.right;
-                }
+            }           
+        } else { // Case 2: current has a left child
+            TreeNode<E> rightMost = current.left;  // Points to the greatest value
+            TreeNode<E> rightMostParent = current; // Parent node
+            while (rightMost.right != null) { // Find the rightMost node
+                rightMostParent = rightMost;
+                rightMost = rightMost.right;
             }
+            current.element = rightMost.element; // Replace the value
+            if (rightMost == current.left) { // No right node in the left subtree
+                rightMostParent.left = rightMost.left; // Delete rightMost node
+            } else {
+                rightMostParent.right = rightMost.left; // Delete rightMost node
+            }           
         }
-          
+         
+        size--;
         return true;
     }
     
