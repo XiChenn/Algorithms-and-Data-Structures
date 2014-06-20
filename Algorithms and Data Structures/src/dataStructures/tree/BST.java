@@ -1,5 +1,8 @@
 package dataStructures.tree;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 /**
  * Binary search tree (BST) is a binary tree where every node is bigger than its left sub-tree,
  * and smaller than its right sub-tree and there is no duplicate nodes
@@ -119,5 +122,42 @@ public class BST<E extends Comparable<E>> implements Tree<E> {
         size--;
         return true;
     }
+
+    public Iterator<E> iterator() {
+        return new InorderIterator();
+    }
     
+    // Inner class - using inorder to traverse the BST
+    public class InorderIterator implements Iterator<E> {
+        // Store element in a list
+        private ArrayList<E> list = new ArrayList<E>();
+        private int current = 0; // Current index in the list
+        
+        public InorderIterator() {
+            inorder(root);
+        }
+        
+        public void inorder(TreeNode<E> root) {
+            if (root == null) {
+                return;
+            }           
+            inorder(root.left);
+            list.add(root.element);
+            inorder(root.right);
+        }
+        
+        public boolean hasNext() {
+            return current < list.size();
+        }
+
+        public E next() {
+            return list.get(current++);
+        }
+
+        public void remove() {
+            delete(list.get(current)); // Remove the current element
+            list.clear();
+            inorder(root); // Reconstruct the list
+        }
+    }
 }
