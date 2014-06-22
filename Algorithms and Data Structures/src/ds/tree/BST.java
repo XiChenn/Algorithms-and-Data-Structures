@@ -1,4 +1,4 @@
-package dataStructures.tree;
+package ds.tree;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -9,7 +9,7 @@ import java.util.Iterator;
  * <p/>
  * Created by xi on 6/11/14.
  */
-public class BST<E extends Comparable<E>> implements Tree<E> {
+public class BST<E extends Comparable<E>> implements Tree<E>, Iterable<E> {
     TreeNode<E> root; // The root of the BST
     int size; // The number of nodes in the BST
 

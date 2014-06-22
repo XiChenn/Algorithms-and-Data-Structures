@@ -1,4 +1,4 @@
-package dataStructures.stack;
+package ds.stack;
 
 import java.util.Arrays;
 import java.util.EmptyStackException;

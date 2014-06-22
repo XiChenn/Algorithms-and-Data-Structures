@@ -1,4 +1,4 @@
-package dataStructures.tree;
+package ds.tree;
 
 import java.util.Iterator;
 
