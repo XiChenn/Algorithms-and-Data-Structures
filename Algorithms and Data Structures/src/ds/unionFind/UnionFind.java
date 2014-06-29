@@ -21,6 +21,7 @@ public class UnionFind {
     // O(n)
     public UnionFind(int N) {
         id = new int[N];
+        size = new int[N];
         for (int i = 0; i < N; i++) {
             id[i] = i; // Initialize each id's parent to itself
             size[i] = 1;
@@ -33,7 +34,7 @@ public class UnionFind {
      * Path compression - after computing the root of i, set the id of each
      * examined node to point to that root
      */
-    private int root(int i) {
+    private int find(int i) {
         while (id[i] !=  i) {
             id[i] = id[id[i]]; // Points to its grandparent (halving path length)
             //int p = i;
@@ -44,14 +45,14 @@ public class UnionFind {
     }
     
     // O(log n) - Find whether p and q are connected
-    public boolean find(int p, int q) {
-        return root(p) == root(q);
+    public boolean connected(int p, int q) {
+        return find(p) == find(q);
     }
     
     // O(log n) - Connect p and q, link root of smaller tree to root of larger tree
     public void union(int p, int q) {
-        int i = root(p); // p's root
-        int j = root(q); // q's root
+        int i = find(p); // p's root
+        int j = find(q); // q's root
         
         if (i == j) { return; }
         
