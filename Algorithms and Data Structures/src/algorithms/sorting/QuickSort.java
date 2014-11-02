@@ -52,7 +52,7 @@ public final class QuickSort {
         int i = low - 1; // All items at or in the left of i must < pivot
         int j = high; // All items at or in the right of j must > pivot
 
-        int randomIdx = (int) ((high - low) * Math.random()) + low;
+        int randomIdx = (int) ((high - low) * Math.random()) + low; // exclude high
         swap(a, randomIdx, high);
         T pivot = a[high]; // pivot always choose the last index
 
